@@ -1,0 +1,75 @@
+1)# Write your MySQL query statement below
+select eu.unique_id , e.name
+from Employees as e
+left join EmployeeUNI as eu
+on e.id =eu.id
+
+<------------------------------------------------------------------------------------------------------------------------------------>
+2)# Write your MySQL query statement below
+select p.product_name,s.year,s.price
+from sales as s
+left join product as p
+on p.product_id=s.product_id
+<------------------------------------------------------------------------------------------------------------------------------------>
+3)SELECT customer_id, COUNT(*) AS count_no_trans
+FROM Visits
+WHERE visit_id NOT IN (SELECT visit_id FROM Transactions)
+GROUP BY customer_id;
+<------------------------------------------------------------------------------------------------------------------------------------>
+4)# Write your MySQL query statement below
+select w1.id
+from Weather w1
+inner join Weather w2
+where datediff(w1.recordDate ,w2.recordDate )=1
+AND w1.temperature > w2.temperature
+<------------------------------------------------------------------------------------------------------------------------------------>
+5)select a.machine_id ,round(avg(b.timestamp-a.timestamp),3) as processing_time
+from Activity a
+inner join Activity b
+on a.process_id = b.process_id
+and a.machine_id = b.machine_id
+and a.timestamp <b.timestamp
+group by machine_id
+<------------------------------------------------------------------------------------------------------------------------------------>
+
+6)select e.name,b.bonus
+from Employee as e
+left join Bonus as b
+on e.empId = b.empId
+where b.bonus is null or b.bonus <1000
+<------------------------------------------------------------------------------------------------------------------------------------>
+
+7)select s.student_id  ,s.student_name ,sub. subject_name, count(e.subject_name)as attended_exams
+from Students as s
+cross join  Subjects as sub
+left join Examinations as e
+on s.student_id = e.student_id and sub.subject_name = e.subject_name
+group  by s.student_id  ,s.student_name ,sub. subject_name
+order by s.student_id  ,sub. Subject_name
+
+<------------------------------------------------------------------------------------------------------------------------------------>
+8)select e1.name
+from Employee e1
+inner join Employee e2
+on e1.id=e2.managerId
+group by e2.managerId
+having count(e2.managerId )>=5
+
+
+#Second method
+
+
+select name
+ from Employee
+ where id in (
+select distinct(managerId) from Employee group by managerId
+ having count(managerId) >= 5)
+<------------------------------------------------------------------------------------------------------------------------------------>
+
+9)select s.user_id,IFNULL(round(sum(action="confirmed")/count(*),2 ),0.00)as confirmation_rate
+from Signups s
+left join Confirmations c
+on s.user_id = c.user_id
+group by s.user_id
+
+
