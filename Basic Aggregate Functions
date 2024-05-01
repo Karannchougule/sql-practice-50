@@ -1,0 +1,56 @@
+ 1) select *
+from Cinema
+where description !="boring" and id % 2 != 0
+order by rating desc
+
+<---------------------------------------------------------------------------------------------------------------------------------------------------------------->
+*2)select p.product_id , IFNULL(round(sum(p.price*u.units)/sum(u.units),2),0) as  average_price
+from Prices p
+left join UnitsSold u
+on p.product_id = u.product_id             
+and u.purchase_date >= p.start_date    (u.purchase_date BETWEEN start_date AND end_date)
+and u.purchase_date <= p.end_date
+group by product_id
+<---------------------------------------------------------------------------------------------------------------------------------------------------------------->
+3) select p.project_id , round(avg(experience_years ),2) as average_years
+from Project p
+left join Employee  e
+on p.employee_id = e.employee_id
+group by project_id
+<---------------------------------------------------------------------------------------------------------------------------------------------------------------->
+4)select r.contest_id , round(count(distinct user_id) * 100 /(select count(user_id) from Users) ,2) as percentage
+from Register r
+group by contest_id
+order by percentage desc,contest_id
+<---------------------------------------------------------------------------------------------------------------------------------------------------------------->
+*5)SELECT
+    query_name ,
+    ROUND(AVG(rating/position),2) AS Quality ,
+    ROUND(AVG(IF(rating <3 , 1 ,0))*100,2) AS poor_query_percentage
+FROM Queries
+WHERE query_name IS NOT NULL
+GROUP BY query_name
+<---------------------------------------------------------------------------------------------------------------------------------------------------------------->
+6)select
+DATE_FORMAT(trans_date, '%Y-%m') AS month,
+country, count(id) as trans_count,
+sum(state="approved") as approved_count ,
+sum(amount) as trans_total_amount,
+sum(if(state="approved",amount,0)) as approved_total_amount
+from Transactions
+group  by month, country
+<---------------------------------------------------------------------------------------------------------------------------------------------------------------->
+7)SELECT
+    ROUND(SUM(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END) * 100.0 / COUNT(DISTINCT customer_id), 2) AS immediate_percentage
+FROM Delivery
+WHERE (customer_id, order_date) IN (
+    SELECT customer_id, MIN(order_date) AS first_order_date
+    FROM Delivery
+    GROUP BY customer_id
+);
+<---------------------------------------------------------------------------------------------------------------------------------------------------------------->
+8)select round(count(distinct player_id )/ (select count(distinct player_id ) from Activity ) ,2)as fraction
+from Activity
+where(player_id,date_sub(event_date,interval 1 day))  in (select player_id , min(event_date)
+from Activity
+group  by player_id )
