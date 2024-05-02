@@ -1,0 +1,44 @@
+1)select teacher_id , count(distinct subject_id) as cnt
+from Teacher
+group by teacher_id
+
+<---------------------------------------------------------------------------------------------------------------->
+  
+2)SELECT activity_date as day, COUNT(DISTINCT user_id) as active_users
+FROM Activity
+WHERE activity_date <= '2019-07-27' and  activity_date >'2019-06-27'
+GROUP BY activity_date
+<---------------------------------------------------------------------------------------------------------------->
+3)SELECT product_id, year AS first_year, quantity, price
+FROM Sales
+WHERE (product_id, year) in (
+    SELECT product_id, MIN(year)
+    FROM Sales
+    GROUP BY product_id
+)
+<---------------------------------------------------------------------------------------------------------------->
+4)select class
+from Courses
+group by class
+having count(student)>=5
+<---------------------------------------------------------------------------------------------------------------->
+5)select  user_id ,count(follower_id) as followers_count
+from Followers
+group by user_id
+order by user_id asc
+<---------------------------------------------------------------------------------------------------------------->
+6)select max(num) as num
+from MyNumbers
+where num in (
+    select num
+    from MyNumbers
+    group by num
+    having count(num) = 1
+<---------------------------------------------------------------------------------------------------------------->
+7)select customer_id
+from Customer
+group by customer_id
+having count(distinct product_key )=(
+    select count(product_key)
+    from Product
+)
