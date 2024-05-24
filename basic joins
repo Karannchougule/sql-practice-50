@@ -11,7 +11,7 @@ from sales as s
 left join product as p
 on p.product_id=s.product_id
 <------------------------------------------------------------------------------------------------------------------------------------>
-3)SELECT customer_id, COUNT(*) AS count_no_trans
+IMPORTANT 3)SELECT customer_id, COUNT(*) AS count_no_trans
 FROM Visits
 WHERE visit_id NOT IN (SELECT visit_id FROM Transactions)
 GROUP BY customer_id;
